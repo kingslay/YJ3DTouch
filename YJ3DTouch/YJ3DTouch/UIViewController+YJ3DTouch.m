@@ -10,7 +10,6 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "YJ3DTouchUtil.h"
-#import "WYBaseViewController.h"
 
 UITableViewCell *impTableCellForItemAtIndexPath(id self, SEL selector, UITableView *tableView, NSIndexPath *indexPath);
 UITableViewCell *impYj3dPrivateTableCellForItemAtIndexPath(id self, SEL selector, UITableView *tableView, NSIndexPath *indexPath);
@@ -151,32 +150,32 @@ UICollectionViewCell *impYj3dPrivateCollectionCellForItemAtIndexPath(id self, SE
 //- (UITableViewCell *)yj3d_private_tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    UITableViewCell *cell = [self yj3d_private_tableView:tableView cellForRowAtIndexPath:indexPath];
-//    
+//
 //    if ([cell yj3d_private_hasRegistered3DTouch] == NO) {
 //        [cell yj3d_private_setHasRegistered3DTouch:YES];
-//        
+//
 //        UIViewController<UIViewControllerPreviewingDelegate> *vc = [tableView yj3d_private_previewDelegateController];
 //        [vc registerForPreviewingWithDelegate:vc sourceView:cell];
-//        
+//
 //        [cell yj3d_private_cell_setTableView:tableView];
 //    }
-//    
+//
 //    return cell;
 //}
 //
 //- (UICollectionViewCell *)yj3d_private_collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    UICollectionViewCell *cell = [self yj3d_private_collectionView:collectionView cellForItemAtIndexPath:indexPath];
-//    
+//
 //    if ([cell yj3d_private_hasRegistered3DTouch] == NO) {
 //        [cell yj3d_private_setHasRegistered3DTouch:YES];
-//        
+//
 //        UIViewController<UIViewControllerPreviewingDelegate> *vc = [collectionView yj3d_private_previewDelegateController];
 //        [vc registerForPreviewingWithDelegate:vc sourceView:cell];
-//        
+//
 //        [cell yj3d_private_cell_setCollectionView:collectionView];
 //    }
-//    
+//
 //    return cell;
 //}
 //
@@ -241,11 +240,11 @@ UICollectionViewCell *impYj3dPrivateCollectionCellForItemAtIndexPath(id self, SE
     if (touchConfig.navigation) {
         [YJ3DTouchUtil safeSwizzleOriginMethod:@selector(pushViewController:animated:)
                               withTargetMethod:@selector(yj3d_private_pushViewController:animated:)
-                                     forClass:[UINavigationController class]];
+                                      forClass:[UINavigationController class]];
     } else if (touchConfig.presentingViewController) {
         [YJ3DTouchUtil safeSwizzleOriginMethod:@selector(presentViewController:animated:completion:)
                               withTargetMethod:@selector(yj3d_private_presentViewController:animated:completion:)
-                                     forClass:[UIViewController class]];
+                                      forClass:[UIViewController class]];
     }
     
     if ([view isKindOfClass:[UITableView class]]) {
@@ -300,9 +299,9 @@ UICollectionViewCell *impYj3dPrivateCollectionCellForItemAtIndexPath(id self, SE
     [viewControllerToCommit yj3d_private_setYJ_previewing3DTouch:NO];
     
     UIView *sourceView = [previewingContext sourceView];
-
+    
     YJ3DTouchConfig *config = [self yj3d_private_3DTouchConfigForPreviewSourceView:sourceView extractDetailVC:NO];
-
+    
     if (config.navigation) {
         [config.navigation pushViewController:viewControllerToCommit animated:YES];
     } else if (config.presentingViewController) {
@@ -411,7 +410,7 @@ UITableViewCell *impTableCellForItemAtIndexPath(id self, SEL selector, UITableVi
     superTarget.receiver = self;
     Class cls = object_getClass(self);
     superTarget.super_class = class_getSuperclass(cls);
-    UITableViewCell *cell = objc_msgSendSuper(&superTarget, selector, tableView, indexPath);
+    UITableViewCell *cell = ((id(*)(id, SEL, id, id))objc_msgSendSuper)((__bridge id)(&superTarget), selector, tableView, indexPath);
     
     configTableViewCell(tableView, cell);
     
@@ -422,7 +421,7 @@ UITableViewCell *impYj3dPrivateTableCellForItemAtIndexPath(id self, SEL selector
 {
     UIViewController *pSelf = self;
     UITableViewCell *cell = [pSelf yj3d_private_tableView:tableView cellForRowAtIndexPath:indexPath];
-
+    
     configTableViewCell(tableView, cell);
     
     return cell;
@@ -448,7 +447,7 @@ UICollectionViewCell *impCollectionCellForItemAtIndexPath(id self, SEL selector,
     superTarget.receiver = self;
     Class cls = object_getClass(self);
     superTarget.super_class = class_getSuperclass(cls);
-    UICollectionViewCell *cell = objc_msgSendSuper(&superTarget, selector, collectionView, indexPath);
+    UICollectionViewCell *cell = ((id(*)(id, SEL, id, id))objc_msgSendSuper)((__bridge id)(&superTarget), selector, collectionView, indexPath);
     
     configCollectionViewCell(collectionView, cell);
     
@@ -464,3 +463,4 @@ UICollectionViewCell *impYj3dPrivateCollectionCellForItemAtIndexPath(id self, SE
     
     return cell;
 }
+
