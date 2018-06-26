@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
 
 
   s.source_files  = "YJ3DTouch/YJ3DTouch", "YJ3DTouch/YJ3DTouch/**/*.{h,m}"
-  
+  s.static_framework = true
   s.requires_arc = true
 
 end
